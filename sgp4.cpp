@@ -31,7 +31,16 @@ namespace // unnamed namespace
 sgp4::Satellite::Satellite(const std::string& line1, const std::string& line2)
 {
     // Parse line 1 of element set.
-    catalog_number = std::strtol(line1.substr(2, 5).c_str(), 0, 10);
+    catalog_number = std::strtol(line1.substr(3, 4).c_str(), 0, 10);
+    const char *alpha5 = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+    for (int c = 0; c < 34; ++c)
+    {
+        if (line1[2] == alpha5[c])
+        {
+            catalog_number += c * 10000;
+            break;
+        }
+    }
     classification = line1[7];
     designator = line1.substr(9, 8);
     long year = 1900 + std::strtol(line1.substr(18, 2).c_str(), 0, 10);
